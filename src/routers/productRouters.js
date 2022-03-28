@@ -29,7 +29,7 @@ productRouter.post(
   upload.single("profile"),
   async (req, res) => {
     // const products = new Products({ ...req.body, owner: req.user._id });
-    const image = `http://localhost:3001/profile/${req.file.filename}`;
+    const image = `http://10.0.2.2:3001/profile/${req.file.filename}`;
     // console.log(req.file.filename);
     const products = new Products({
       name: req.body.name,

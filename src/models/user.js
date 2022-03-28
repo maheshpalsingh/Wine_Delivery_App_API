@@ -3,6 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Products = require("./product");
+const Orders = require("./order");
 // const Topic = require("./topics");
 // const Article = require("./article");
 const userSchema = new mongoose.Schema(
@@ -62,11 +63,11 @@ userSchema.virtual("products", {
   foreignField: "owner",
 });
 
-// userSchema.virtual("articles", {
-//   ref: "Article",
-//   localField: "_id",
-//   foreignField: "owner",
-// });
+userSchema.virtual("orders", {
+  ref: "Orders",
+  localField: "_id",
+  foreignField: "owner",
+});
 
 // userSchema.methods.toJSON = function () {
 //   const user = this;

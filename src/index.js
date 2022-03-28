@@ -5,10 +5,17 @@ const port = process.env.PORT || 3001;
 
 const user = require("./routers/userRouters");
 const product = require("./routers/productRouters");
+const order = require("./routers/orderRouters");
 app.use(express.json());
 app.use(user);
 app.use(product);
+app.use(order);
 app.use("/profile", express.static("uploads/images"));
+
+app.listen(port, () => {
+  console.log(`Server is up on ${port} port`);
+});
+
 // const multer = require("multer");
 // const storage = multer.diskStorage({
 //   destination: "./uploads/images",
@@ -33,7 +40,3 @@ app.use("/profile", express.static("uploads/images"));
 //     image: `http://localhost:3001/profile/${req.file.filename}`,
 //   });
 // });
-
-app.listen(port, () => {
-  console.log(`Server is up on ${port} port`);
-});
