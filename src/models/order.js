@@ -3,7 +3,8 @@ const OrdersSchema = new mongoose.Schema(
   {
     qty: {
       type: Number,
-      default: 1,
+      required: true,
+      // default: 1,
       trim: true,
     },
     owner: {

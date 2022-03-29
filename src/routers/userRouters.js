@@ -45,7 +45,6 @@ userRouter.post("/users/logoutAll", auth, async (req, res) => {
 //register
 userRouter.post("/users", async (req, res) => {
   const user = new User(req.body);
-
   try {
     await user.save();
     const token = await user.generateAuthToken();
