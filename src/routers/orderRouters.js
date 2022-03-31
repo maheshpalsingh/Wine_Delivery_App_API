@@ -7,18 +7,19 @@ const { findOneAndUpdate } = require("../models/product");
 const Products = require("../models/product");
 
 //addtocart
-orderRouter.post("/order/:id", async (req, res) => {
+orderRouter.post("/order/:id", auth, async (req, res) => {
   try {
     const findproduct = await Products.find({
       _id: req.params.id,
     });
-    const ownerid = findproduct[0].owner;
+    // const ownerid = findproduct[0].owner;
+    console.log(req.params.id);
     if (!findproduct) {
       return res.status(404).send("No data");
     }
     const findorder = await Orders.find({
       productid: req.params.id,
-      // owner: req.user._id,
+      owner: req.user._id,
     });
     let preqty = 0;
     if (findorder.length !== 0) {
@@ -31,8 +32,8 @@ orderRouter.post("/order/:id", async (req, res) => {
     const orders = new Orders({
       qty: preqty,
       productid: req.params.id,
-      //owner: req.user._id,
-      owner: ownerid,
+      owner: req.user._id,
+      //owner: ownerid,
     });
     orders.productName.push(findproduct[0].name);
     orders.productImage.push(findproduct[0].image);
@@ -47,10 +48,10 @@ orderRouter.post("/order/:id", async (req, res) => {
 });
 
 //get my orders
-orderRouter.get("/orders/me", async (req, res) => {
+orderRouter.get("/orders/me", auth, async (req, res) => {
   try {
-    //const products = await Orders.find({ owner: req.user._id });
-    const products = await Orders.find();
+    const products = await Orders.find({ owner: req.user._id });
+    //const products = await Orders.find();
     if (!products) {
       return res.status(404).send("No data");
     }
@@ -61,7 +62,7 @@ orderRouter.get("/orders/me", async (req, res) => {
 });
 
 //delete
-orderRouter.delete("/orders/me/:id", async (req, res) => {
+orderRouter.delete("/orders/me/:id", auth, async (req, res) => {
   try {
     let orderforupdate = await Orders.find({ _id: req.params.id });
     if (!orderforupdate) {

@@ -4,9 +4,11 @@ const auth = require("../middleware/auth");
 const User = require("../models/user");
 //const sharp = require("sharp");
 
+// userRouter.get("/");
 //Login
 userRouter.post("/users/login1", async (req, res) => {
   try {
+    console.log("3");
     const user = await User.findbycredentials(
       req.body.email,
       req.body.password
