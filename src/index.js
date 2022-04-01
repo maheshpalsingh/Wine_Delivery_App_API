@@ -5,11 +5,11 @@ const port = process.env.PORT || 3001;
 
 const user = require("./routers/userRouters");
 const product = require("./routers/productRouters");
-const order = require("./routers/orderRouters");
+const cart = require("./routers/cartRouters");
 app.use(express.json());
 app.use(user);
 app.use(product);
-app.use(order);
+app.use(cart);
 app.use("/profile", express.static("uploads/images"));
 
 app.listen(port, () => {

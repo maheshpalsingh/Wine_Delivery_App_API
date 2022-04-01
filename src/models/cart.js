@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const OrdersSchema = new mongoose.Schema(
+const CartsSchema = new mongoose.Schema(
   {
     qty: {
       type: Number,
@@ -38,6 +38,6 @@ const OrdersSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-const Orders = mongoose.model("Orders", OrdersSchema);
+const Carts = mongoose.model("Carts", CartsSchema);
 
-module.exports = Orders;
+module.exports = Carts;
