@@ -22,22 +22,21 @@ const upload = multer({
   },
 });
 
-//register
+//registerproduct
 productRouter.post(
-  "/products",
+  "/products/add",
   auth,
   upload.single("profile"),
   async (req, res) => {
-    // const products = new Products({ ...req.body, owner: req.user._id });
     const image = `http://10.0.2.2:3001/profile/${req.file.filename}`;
-    // console.log(req.file.filename);
+    const data = req.body;
     const products = new Products({
-      name: req.body.name,
+      name: data.name,
       owner: req.user._id,
-      price: req.body.price,
-      category: req.body.category,
-      description: req.body.description,
-      company: req.body.company,
+      price: data.price,
+      category: data.category,
+      description: data.description,
+      company: data.company,
       image,
     });
     try {
@@ -49,7 +48,8 @@ productRouter.post(
   }
 );
 
-productRouter.get("/products/me", auth, async (req, res) => {
+//get my products
+productRouter.get("/products/my", auth, async (req, res) => {
   try {
     const products = await Products.find({ owner: req.user._id })
       .sort({
@@ -62,6 +62,7 @@ productRouter.get("/products/me", auth, async (req, res) => {
   }
 });
 
+//getallproducts
 productRouter.get("/products/all", async (req, res) => {
   try {
     const products = await Products.find()
@@ -75,7 +76,7 @@ productRouter.get("/products/all", async (req, res) => {
   }
 });
 
-//bycategory
+//getproductsbycategory
 productRouter.get("/products/category/:cat", async (req, res) => {
   try {
     const products = await Products.find({ category: req.params.cat });
@@ -88,45 +89,53 @@ productRouter.get("/products/category/:cat", async (req, res) => {
   }
 });
 
-//update
-productRouter.patch("/products/me/:id", auth, async (req, res) => {
-  const allowedupdates = [
-    "name",
-    "company",
-    "price",
-    "description",
-    "category",
-  ];
-  const updates = Object.keys(req.body);
-  const isvalidupdate = updates.every((update) =>
-    allowedupdates.includes(update)
-  );
+//updatemyproducts
+productRouter.patch(
+  "/products/me/:id",
+  auth,
+  upload.single("image"),
+  async (req, res) => {
+    const allowedupdates = [
+      "name",
+      "company",
+      "price",
+      "description",
+      "category",
+      "image",
+    ];
 
-  if (!isvalidupdate) {
-    return res.status(404).send({ error: "invalid updates" });
-  }
+    const updates = Object.keys({ ...req.body, image: req.file.filename });
+    const isvalidupdate = updates.every((update) =>
+      allowedupdates.includes(update)
+    );
 
-  try {
-    const products = await Products.findOne({
-      _id: req.params.id,
-      owner: req.user._id,
-    });
-
-    if (!products) {
-      return res.status(404).send();
+    if (!isvalidupdate) {
+      return res.status(404).send({ error: "invalid updates" });
     }
-    updates.forEach((update) => {
-      products[update] = req.body[update];
-    });
-    await products.save();
-    res.send(products);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
 
-//delete
-productRouter.delete("/products/me/:id", auth, async (req, res) => {
+    try {
+      const products = await Products.findOne({
+        _id: req.params.id,
+        owner: req.user._id,
+      });
+
+      if (!products) {
+        return res.status(404).send();
+      }
+      updates.forEach((update) => {
+        products[update] = req.body[update];
+        //products[update.image] = image;
+      });
+      await products.save();
+      res.send(products);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+);
+
+//deletemyproducts
+productRouter.delete("/products/delete/my/:id", auth, async (req, res) => {
   try {
     const products = await Products.findOneAndDelete({
       _id: req.params.id,
@@ -141,4 +150,5 @@ productRouter.delete("/products/me/:id", auth, async (req, res) => {
     res.status(500).send();
   }
 });
+
 module.exports = productRouter;

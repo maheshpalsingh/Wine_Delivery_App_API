@@ -2,11 +2,9 @@ const express = require("express");
 const userRouter = express.Router();
 const auth = require("../middleware/auth");
 const User = require("../models/user");
-//const sharp = require("sharp");
 
-// userRouter.get("/");
 //Login
-userRouter.post("/users/login1", async (req, res) => {
+userRouter.post("/users/login", async (req, res) => {
   try {
     console.log("3");
     const user = await User.findbycredentials(
@@ -27,7 +25,7 @@ userRouter.post("/users/logout", auth, async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
-    res.send();
+    res.status(200).send("Thankyou");
   } catch (e) {
     res.status(500).send(e);
   }
@@ -38,14 +36,14 @@ userRouter.post("/users/logoutAll", auth, async (req, res) => {
   try {
     req.user.tokens = [];
     await req.user.save();
-    res.send();
+    res.status(200).send();
   } catch (error) {
     res.sendStatus(500);
   }
 });
 
 //register
-userRouter.post("/users", async (req, res) => {
+userRouter.post("/users/register", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
@@ -57,12 +55,13 @@ userRouter.post("/users", async (req, res) => {
 });
 
 //readmyprofile
-userRouter.get("/users/me", auth, async (req, res) => {
+userRouter.get("/users/get/me", auth, async (req, res) => {
   res.send(req.user);
+  console.log(req.user);
 });
 
 //update
-userRouter.patch("/users/me", auth, async (req, res) => {
+userRouter.patch("/users/update/me", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedupdates = ["name", "email", "age", "password"];
   const updatesAllowed = updates.every((update) =>
@@ -81,7 +80,7 @@ userRouter.patch("/users/me", auth, async (req, res) => {
 });
 
 //delete
-userRouter.delete("/users/me", auth, async (req, res) => {
+userRouter.delete("/users/delete/me", auth, async (req, res) => {
   try {
     await req.user.remove();
     res.send(req.user);
