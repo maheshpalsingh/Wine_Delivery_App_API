@@ -34,6 +34,15 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
+    contactno: {
+      required: true,
+      type: Number,
+      validate(value) {
+        if (value < 10) {
+          throw new Error("number should be greater than 10");
+        }
+      },
+    },
     password: {
       required: true,
       type: String,
@@ -65,6 +74,12 @@ userSchema.virtual("products", {
 
 userSchema.virtual("carts", {
   ref: "Carts",
+  localField: "_id",
+  foreignField: "owner",
+});
+
+userSchema.virtual("orders", {
+  ref: "Orders",
   localField: "_id",
   foreignField: "owner",
 });
