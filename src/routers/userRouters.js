@@ -63,7 +63,7 @@ userRouter.get("/users/get/me", auth, async (req, res) => {
 //update
 userRouter.patch("/users/update/me", auth, async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedupdates = ["name", "email", "age", "password"];
+  const allowedupdates = ["name", "email", "age", "password", "contactno"];
   const updatesAllowed = updates.every((update) =>
     allowedupdates.includes(update)
   );

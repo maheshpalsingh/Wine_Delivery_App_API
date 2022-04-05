@@ -13,20 +13,32 @@ orderRouters.post("/placeorder/my", auth, async (req, res) => {
     const findcart = await Carts.find({
       owner: req.user._id,
     });
-    console.log(findcart);
+    // console.log(findcart);
     let finalAmount = 0;
     let products = [];
+    let qty = [];
+    let pname = [];
+    let price = [];
     findcart.forEach((total, items) => {
+      console.log(total);
       products = products.concat(total._id);
       finalAmount = finalAmount + total.qty * total.productPrice[0];
+      qty = qty.concat(total.qty);
+      console.log("2");
+      pname = pname.concat(total.productName[0]);
+      price = price.concat(total.productPrice[0]);
     });
-    console.log(products, finalAmount);
+    console.log(products, finalAmount, pname, qty, price);
     const updatecart = await Carts.deleteMany({ owner: req.user._id });
     const order = new Orders({
       total: finalAmount,
       products,
+      name: pname,
+      qty,
+      price,
       owner: req.user._id,
     });
+    console.log(order);
     await order.save();
     res.status(200).send({ order });
   } catch (error) {

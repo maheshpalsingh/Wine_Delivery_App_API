@@ -13,6 +13,24 @@ const OrdersSchema = new mongoose.Schema(
         addBy: { type: String, ref: "Carts" },
       },
     ],
+    name: [
+      {
+        type: Object,
+        addBy: { type: String, ref: "Carts" },
+      },
+    ],
+    qty: [
+      {
+        type: Object,
+        addBy: { type: Number, ref: "Carts" },
+      },
+    ],
+    price: [
+      {
+        type: Object,
+        addBy: { type: Number, ref: "Carts" },
+      },
+    ],
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
