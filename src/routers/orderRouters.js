@@ -4,8 +4,6 @@ const orderRouters = express.Router();
 const auth = require("../middleware/auth");
 const Carts = require("../models/cart");
 const Orders = require("../models/orders");
-const { findOneAndUpdate } = require("../models/product");
-const Products = require("../models/product");
 
 //addtocart
 orderRouters.post("/placeorder/my", auth, async (req, res) => {

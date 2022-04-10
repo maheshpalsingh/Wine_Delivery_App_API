@@ -7,11 +7,13 @@ const user = require("./routers/userRouters");
 const product = require("./routers/productRouters");
 const cart = require("./routers/cartRouters");
 const orders = require("./routers/orderRouters");
+const address = require("./routers/addressRouters");
 app.use(express.json());
 app.use(user);
 app.use(orders);
 app.use(product);
 app.use(cart);
+app.use(address);
 app.use("/profile", express.static("uploads/images"));
 
 app.listen(port, () => {

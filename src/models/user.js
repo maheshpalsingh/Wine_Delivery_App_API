@@ -6,6 +6,7 @@ const Products = require("./product");
 const Carts = require("./cart");
 // const Topic = require("./topics");
 // const Article = require("./article");
+const Address = require("./address");
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -84,13 +85,18 @@ userSchema.virtual("orders", {
   foreignField: "owner",
 });
 
-// userSchema.methods.toJSON = function () {
-//   const user = this;
-//   const newuser = user.toObject();
-//   delete newuser.password;
-//   delete newuser.tokens;
-//   return newuser;
-// };
+userSchema.virtual("addresses", {
+  ref: "Address",
+  localField: "_id",
+  foreignField: "owner",
+});
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const newuser = user.toObject();
+  delete newuser.password;
+  delete newuser.tokens;
+  return newuser;
+};
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;

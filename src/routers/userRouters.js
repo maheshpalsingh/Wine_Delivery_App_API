@@ -2,7 +2,7 @@ const express = require("express");
 const userRouter = express.Router();
 const auth = require("../middleware/auth");
 const User = require("../models/user");
-
+const bcrypt = require("bcryptjs");
 //Login
 userRouter.post("/users/login", async (req, res) => {
   try {
@@ -78,7 +78,29 @@ userRouter.patch("/users/update/me", auth, async (req, res) => {
     res.status(400).send(e);
   }
 });
+userRouter.post("/users/reset/password", async (req, res) => {
+  try {
+    const data = req.body;
+    const verifyemail = await User.findOne({ email: data.email });
+    if (!verifyemail) {
+      return res.status(400).send("Email is not found");
+    }
 
+    if (data.password !== data.confirmpassword) {
+      return res.status(400).send("Password should be same");
+    }
+
+    const updatePassword = await User.findByIdAndUpdate(verifyemail._id, {
+      password: await bcrypt.hash(data.password, 8),
+      //password: data.password,
+    });
+
+    await updatePassword.save();
+    res.status(200).send("Password Updated");
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 //delete
 userRouter.delete("/users/delete/me", auth, async (req, res) => {
   try {

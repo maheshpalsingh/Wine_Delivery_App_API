@@ -79,7 +79,7 @@ productRouter.get("/products/all", async (req, res) => {
 //getproductsbycategory
 productRouter.get("/products/category/:cat", async (req, res) => {
   try {
-    const products = await Products.find({ category: req.params.cat });
+    const products = await Products.find({ company: req.params.cat });
     if (!products) {
       return res.status(404).send("No data");
     }
