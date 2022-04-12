@@ -65,11 +65,11 @@ productRouter.get("/products/my", auth, async (req, res) => {
 //getallproducts
 productRouter.get("/products/all", async (req, res) => {
   try {
-    const products = await Products.find()
-      .sort({
-        createdAt: -1,
-      })
-      .limit(5);
+    const products = await Products.find();
+    // .sort({
+    //   createdAt: -1,
+    // })
+    // .limit(5);
     res.send(products);
   } catch (e) {
     res.status(500).send(e);

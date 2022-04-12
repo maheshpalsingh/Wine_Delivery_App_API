@@ -19,6 +19,12 @@ const OrdersSchema = new mongoose.Schema(
         addBy: { type: String, ref: "Carts" },
       },
     ],
+    image: [
+      {
+        type: Object,
+        addBy: { type: String, ref: "Carts" },
+      },
+    ],
     qty: [
       {
         type: Object,

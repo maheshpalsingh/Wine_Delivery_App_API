@@ -14,6 +14,7 @@ orderRouters.post("/placeorder/my", auth, async (req, res) => {
     // console.log(findcart);
     let finalAmount = 0;
     let products = [];
+    let image = [];
     let qty = [];
     let pname = [];
     let price = [];
@@ -25,6 +26,7 @@ orderRouters.post("/placeorder/my", auth, async (req, res) => {
       console.log("2");
       pname = pname.concat(total.productName[0]);
       price = price.concat(total.productPrice[0]);
+      image = image.concat(total.productImage[0]);
     });
     console.log(products, finalAmount, pname, qty, price);
     const updatecart = await Carts.deleteMany({ owner: req.user._id });
@@ -34,6 +36,7 @@ orderRouters.post("/placeorder/my", auth, async (req, res) => {
       name: pname,
       qty,
       price,
+      image,
       owner: req.user._id,
     });
     console.log(order);
